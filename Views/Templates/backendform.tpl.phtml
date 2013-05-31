@@ -1,0 +1,1866 @@
+<!--
+    id+class werden im form element gespeichert, sollen aber im frontend zusammenbau
+    fuer das das umschließende div genutzt werden.
+-->
+<script type="text/javascript" src="<?php echo $this->bootstrapJS ?>"></script>
+<link rel="stylesheet" href="<?php echo $this->bootstrapCSS ?>" />
+<script type="text/javascript" src="<?php echo $this->urlJQmin ?>"></script>
+<script type="text/javascript" src="<?php echo $this->urlJQcore ?>"></script>
+<script type="text/javascript" src="<?php echo $this->urlJQsortable ?>"></script>
+<script type="text/javascript" src="<?php echo $this->urlJQUI ?>"></script>
+<link rel="stylesheet" href="<?php echo $this->urlJQUIcss ?>" />
+<script language="javascript" type="text/javascript" src="<?php echo $this->mce ?>"></script>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $( "#container" ).tabs();
+        $("#container > ul li a").click(function() {
+            $("#container > ul li a").removeClass('active');
+            $(this).addClass("active");
+        });
+        $( "#container_formdata_tabs" ).tabs();
+        $("#container_formdata_tabs > ul li a").click(function() {
+            $("#container_formdata_tabs > ul li a").removeClass('active2');
+            $(this).addClass("active2");
+        });
+
+        var settingsOpenedForElementId;
+        var settingsOpenedForElementType;
+        var i = 0;
+
+        $("#settings_dialog").dialog({
+            autoOpen: false,
+            title: "Element konfigurieren",
+            height: 650,
+            width: 500,
+            modal: false,
+            draggable: true,
+            buttons: {
+                "speichern": function() {
+                    switch("settings_" + settingsOpenedForElementType){
+                        case "settings_textbox":
+                        case "settings_password":
+                        case "settings_uploadfield":
+                            if($("#settings_dialog #settings_" + settingsOpenedForElementType + " #field_id div.control-group div.controls input#input_id").val() !== "") {
+                                $("#" + settingsOpenedForElementId).closest("li").find("div.controls input").attr("id",$("#settings_dialog #settings_" + settingsOpenedForElementType + " #field_id div.control-group div.controls input#input_id").val());
+                                $("#" + settingsOpenedForElementId).closest("li").find("div.control-group label.control-label").attr("for",$("#settings_dialog #settings_" + settingsOpenedForElementType + " #field_id div.control-group div.controls input#input_id").val());
+                            }
+                            if($("#settings_dialog #settings_" + settingsOpenedForElementType + " #field_name div.control-group div.controls input#input_name").val() !== ""){
+                                $("#" + settingsOpenedForElementId).closest("li").find("div.controls input").attr("name",$("#settings_dialog #settings_" + settingsOpenedForElementType + " #field_name div.control-group div.controls input#input_name").val());
+                            }
+                            if($("#settings_dialog #settings_" + settingsOpenedForElementType + " #field_label div.control-group div.controls input#input_label").val() !== ""){
+                                $("#" + settingsOpenedForElementId).closest("li").find("div.control-group label.control-label").html($("#settings_dialog #settings_" + settingsOpenedForElementType + " #field_label div.control-group div.controls input#input_label").val());
+                            }
+                            
+                            $("#" + settingsOpenedForElementId).closest("li").find("div.controls input").attr("placeholder",$("#settings_dialog #settings_" + settingsOpenedForElementType + " #field_placeholder div.control-group div.controls input#input_placeholder").val());
+                            $("#" + settingsOpenedForElementId).closest("li").find("div.controls input").attr("class",$("#settings_dialog #settings_" + settingsOpenedForElementType + " #field_class div.control-group div.controls input#input_class").val());
+                            break;
+                            
+                        case "settings_textarea":
+                            if($("#settings_dialog #settings_textarea #field_id div.control-group div.controls input#input_id").val() !== "") {
+                                $("#" + settingsOpenedForElementId).closest("li").find("div.controls textarea").attr("id",$("#settings_dialog #settings_textarea #field_id div.control-group div.controls input#input_id").val());
+                                $("#" + settingsOpenedForElementId).closest("li").find("div.control-group label.control-label").attr("for",$("#settings_dialog #settings_textarea #field_id div.control-group div.controls input#input_id").val());
+                            }
+                            if($("#settings_dialog #settings_textarea #field_name div.control-group div.controls input#input_name").val() !== ""){
+                                $("#" + settingsOpenedForElementId).closest("li").find("div.controls textarea").attr("name",$("#settings_dialog #settings_textarea #field_name div.control-group div.controls input#input_name").val());
+                            }
+                            if($("#settings_dialog #settings_textarea #field_label div.control-group div.controls input#input_label").val() !== ""){
+                                $("#" + settingsOpenedForElementId).closest("li").find("div.control-group label.control-label").html($("#settings_dialog #settings_textarea #field_label div.control-group div.controls input#input_label").val());
+                            }
+                            if($("#settings_dialog #settings_textarea #field_rows div.control-group div.controls input#input_rows").val() !== ""){
+                                $("#" + settingsOpenedForElementId).closest("li").find("div.controls textarea").attr("rows",$("#settings_dialog #settings_textarea #field_rows div.control-group div.controls input#input_rows").val());
+                            }
+                            if($("#settings_dialog #settings_textarea #field_rows div.control-group div.controls input#input_cols").val() !== ""){
+                                $("#" + settingsOpenedForElementId).closest("li").find("div.controls textarea").attr("cols",$("#settings_dialog #settings_textarea #field_cols div.control-group div.controls input#input_cols").val());
+                            }
+                            $("#" + settingsOpenedForElementId).closest("li").find("div.controls textarea").attr("class",$("#settings_dialog #settings_textarea #field_class div.control-group div.controls input#input_class").val());
+                            break;
+                            
+                        case "settings_hidden":
+                            if($("#settings_dialog #settings_hidden #field_id div.control-group div.controls input#input_id").val() !== "") {
+                                $("#" + settingsOpenedForElementId).closest("li").find("div.controls input").attr("id",$("#settings_dialog #settings_hidden #field_id div.control-group div.controls input#input_id").val());
+                                $("#" + settingsOpenedForElementId).closest("li").find("div.control-group label.control-label").attr("for",$("#settings_dialog #settings_hidden #field_id div.control-group div.controls input#input_id").val());
+                            }
+                            if($("#settings_dialog #settings_hidden #field_name div.control-group div.controls input#input_name").val() !== ""){
+                                $("#" + settingsOpenedForElementId).closest("li").find("div.controls input").attr("name",$("#settings_dialog #settings_hidden #field_name div.control-group div.controls input#input_name").val());
+                            }
+                            if($("#settings_dialog #settings_hidden #field_label div.control-group div.controls input#input_label").val() !== ""){
+                                $("#" + settingsOpenedForElementId).closest("li").find("div.control-group label.control-label").html($("#settings_dialog #settings_hidden #field_label div.control-group div.controls input#input_label").val());
+                            }
+                            $("#" + settingsOpenedForElementId).closest("li").find("div.controls input").attr("class",$("#settings_dialog #settings_hidden #field_class div.control-group div.controls input#input_class").val());
+                            break;
+                            
+                        case "settings_checkbox":
+                            if($("#settings_dialog #settings_checkbox #field_id div.control-group div.controls input#input_id").val() !== "") {
+                                $("#" + settingsOpenedForElementId).closest("li").find("div.controls input").attr("id",$("#settings_dialog #settings_checkbox #field_id div.control-group div.controls input#input_id").val());
+                                $("#" + settingsOpenedForElementId).closest("li").find("div.control-group label.control-label").attr("for",$("#settings_dialog #settings_checkbox #field_id div.control-group div.controls input#input_id").val());
+                            }
+                            if($("#settings_dialog #settings_checkbox #field_name div.control-group div.controls input#input_name").val() !== ""){
+                                $("#" + settingsOpenedForElementId).closest("li").find("div.controls input").attr("name",$("#settings_dialog #settings_checkbox #field_name div.control-group div.controls input#input_name").val());
+                            }
+                            if($("#settings_dialog #settings_checkbox #field_label div.control-group div.controls input#input_label").val() !== ""){
+                                $("#" + settingsOpenedForElementId).closest("li").find("div.control-group label.control-label").html($("#settings_dialog #settings_checkbox #field_label div.control-group div.controls input#input_label").val());
+                            }
+                            
+                            $("#" + settingsOpenedForElementId).closest("li").find("div.controls input").attr("class",$("#settings_dialog #settings_checkbox #field_class div.control-group div.controls input#input_class").val());
+                            $("#" + settingsOpenedForElementId).closest("li").find("div.controls span").html($("#settings_dialog #settings_checkbox #field_description div.control-group div.controls textarea#textarea_description").val());
+                            break;
+                            
+                        case "settings_selectbox":
+                            if($("#settings_dialog #settings_selectbox #field_id div.control-group div.controls input#input_id").val() !== "") {
+                                $("#" + settingsOpenedForElementId).closest("li").find("div.controls select").attr("id",$("#settings_dialog #settings_selectbox #field_id div.control-group div.controls input#input_id").val());
+                                $("#" + settingsOpenedForElementId).closest("li").find("div.control-group label.control-label").attr("for",$("#settings_dialog #settings_selectbox #field_id div.control-group div.controls input#input_id").val());
+                            }
+                            if($("#settings_dialog #settings_selectbox #field_name div.control-group div.controls input#input_name").val() !== ""){
+                                $("#" + settingsOpenedForElementId).closest("li").find("div.controls select").attr("name",$("#settings_dialog #settings_selectbox #field_name div.control-group div.controls input#input_name").val());
+                            }
+                            if($("#settings_dialog #settings_selectbox #field_label div.control-group div.controls input#input_label").val() !== ""){
+                                $("#" + settingsOpenedForElementId).closest("li").find("div.control-group label.control-label").html($("#settings_dialog #settings_selectbox #field_label div.control-group div.controls input#input_label").val());
+                            }
+                            
+                            $("#" + settingsOpenedForElementId).closest("li").find("div.controls select").attr("class",$("#settings_dialog #settings_selectbox #field_class div.control-group div.controls input#input_class").val());
+                            $("#" + settingsOpenedForElementId).closest("li").find("div.controls select option").remove();
+                            var k = 1;
+                            $("#settings_dialog #settings_selectbox #container_options ul#optionlist li").each(function(){
+                                var optLabel = $("> span",this).html();
+                                $("#hidden_elements #select_option option").html(optLabel);
+                                $("#hidden_elements #select_option option").attr("value", k);
+                                $("#hidden_elements #select_option option").clone().appendTo($("#" + settingsOpenedForElementId).closest("li").find("div.controls select"));
+                                k++;
+                            });
+                            break;
+                            
+                        case "settings_radiobutton":
+                            if($("#settings_dialog #settings_radiobutton #field_id div.control-group div.controls input#input_id").val() !== "") {
+                                $("#" + settingsOpenedForElementId).closest("li").find("div.control-group input").attr("id",$("#settings_dialog #settings_radiobutton #field_id div.control-group div.controls input#input_id").val());
+                                $("#" + settingsOpenedForElementId).closest("li").find("div.control-group label.control-label").attr("for",$("#settings_dialog #settings_radiobutton #field_id div.control-group div.controls input#input_id").val());
+                            }
+                            if($("#settings_dialog #settings_radiobutton #field_name div.control-group div.controls input#input_name").val() !== ""){
+                                $("#" + settingsOpenedForElementId).closest("li").find("div.control-group input").attr("name",$("#settings_dialog #settings_radiobutton #field_name div.control-group div.controls input#input_name").val());
+                            }
+                            if($("#settings_dialog #settings_radiobutton #field_label div.control-group div.controls input#input_label").val() !== ""){
+                                $("#" + settingsOpenedForElementId).closest("li").find("div.control-group label.control-label").html($("#settings_dialog #settings_radiobutton #field_label div.control-group div.controls input#input_label").val());
+                            }
+                            
+                            $("#" + settingsOpenedForElementId).closest("li").find("div.control-group input").attr("class",$("#settings_dialog #settings_radiobutton #field_class div.control-group div.controls input#input_class").val());
+                            $("#" + settingsOpenedForElementId).closest("li").find("div.controls div").remove();
+                            var k = 1;
+                            $("#settings_dialog #settings_radiobutton #container_options ul#optionlist li").each(function(){
+                                var optLabel = $("> span",this).html();
+                                $("#hidden_elements #radio_option div span").html(optLabel);
+                                $("#hidden_elements #radio_option div input").attr("value", k);
+                                $("#hidden_elements #radio_option div input").attr("name", $("#settings_dialog #settings_radiobutton #field_name div.control-group div.controls input#input_name").val());
+                                $("#hidden_elements #radio_option div").clone().appendTo($("#" + settingsOpenedForElementId).closest("li").find("div.controls"));
+                                k++;
+                            });
+                            break;
+                            
+                        case "settings_submit":
+                        case "settings_button":
+                            if($("#settings_dialog #settings_" + settingsOpenedForElementType + " #field_id div.control-group div.controls input#input_id").val() !== "") {
+                                $("#" + settingsOpenedForElementId).closest("li").find("div.control-group > input").attr("id",$("#settings_dialog #settings_" + settingsOpenedForElementType + " #field_id div.control-group div.controls input#input_id").val());
+                                $("#" + settingsOpenedForElementId).closest("li").find("div.control-group label.control-label").attr("for",$("#settings_dialog #settings_" + settingsOpenedForElementType + " #field_id div.control-group div.controls input#input_id").val());
+                            }
+                            if($("#settings_dialog #settings_" + settingsOpenedForElementType + " #field_name div.control-group div.controls input#input_name").val() !== ""){
+                                $("#" + settingsOpenedForElementId).closest("li").find("div.control-group input").attr("name",$("#settings_dialog #settings_" + settingsOpenedForElementType + " #field_name div.control-group div.controls input#input_name").val());
+                            }
+                            if($("#settings_dialog #settings_" + settingsOpenedForElementType + " #field_label div.control-group div.controls input#input_label").val() !== ""){
+                                $("#" + settingsOpenedForElementId).closest("li").find("div.control-group label.control-label").html($("#settings_dialog #settings_" + settingsOpenedForElementType + " #field_label div.control-group div.controls input#input_label").val());
+                            }
+                            
+                            $("#" + settingsOpenedForElementId).closest("li").find("div.control-group > input").attr("class",$("#settings_dialog #settings_" + settingsOpenedForElementType + " #field_class div.control-group div.controls input#input_class").val());
+                            $("#" + settingsOpenedForElementId).closest("li").find("div.control-group div.controls input").attr("value",$("#settings_dialog #settings_" + settingsOpenedForElementType + " #field_value div.control-group div.controls input#input_value").val());
+                            break;
+                    }
+                    $(this).dialog("close");
+                },
+                "abbrechen": function() {
+                    $(this).dialog("close");
+                }
+            }
+        });
+        
+        $("#form_sortable").sortable({
+            axis: "y",
+            handle: "img.move_handler",
+            containment: "#container_formbuilder"
+        });
+
+        
+        
+        $("#container_form_elements_inner ul li").disableSelection();
+        $("#container_form_elements_inner ul li").draggable({
+            helper: "clone",
+            snap: "#container_formbuilder",
+            containment: "#container_formbuilder"
+        });
+        
+        $("#container_form ul#form_sortable").droppable({
+            drop: function( event, ui ) {
+                var id = ui.draggable.attr("id");
+                switch(id){
+                    case "add_textbox":
+                        $("#hidden_elements #textbox li div.icon_container").attr("id", "element_" + i);
+                        $("#hidden_elements #textbox li").clone().appendTo(this);
+                        break;
+                    case "add_password":
+                        $("#hidden_elements #password li div.icon_container").attr("id", "element_" + i);
+                        $("#hidden_elements #password li").clone().appendTo(this);
+                        break;
+                    case "add_hidden":
+                        $("#hidden_elements #hidden li div.icon_container").attr("id", "element_" + i);
+                        $("#hidden_elements #hidden li").clone().appendTo(this);
+                        break;
+                    case "add_textarea":
+                        $("#hidden_elements #textarea li div.icon_container").attr("id", "element_" + i);
+                        $("#hidden_elements #textarea li").clone().appendTo(this);
+                        break;
+                    case "add_checkbox":
+                        $("#hidden_elements #checkbox li div.icon_container").attr("id", "element_" + i);
+                        $("#hidden_elements #checkbox li").clone().appendTo(this);
+                        break;
+                    case "add_radiobutton":
+                        $("#hidden_elements #radiobutton li div.icon_container").attr("id", "element_" + i);
+                        $("#hidden_elements #radiobutton li").clone().appendTo(this);
+                        break;
+                    case "add_selectbox":
+                        $("#hidden_elements #selectbox li div.icon_container").attr("id", "element_" + i);
+                        $("#hidden_elements #selectbox li").clone().appendTo(this);
+                        break;
+                    case "add_uploadfield":
+                        $("#hidden_elements #uploadfield li div.icon_container").attr("id", "element_" + i);
+                        $("#hidden_elements #uploadfield li").clone().appendTo(this);
+                        break;
+                    case "add_submit":
+                        $("#hidden_elements #submit li div.icon_container").attr("id", "element_" + i);
+                        $("#hidden_elements #submit li").clone().appendTo(this);
+                        break;
+                    case "add_button":
+                        $("#hidden_elements #button li div.icon_container").attr("id", "element_" + i);
+                        $("#hidden_elements #button li").clone().appendTo(this);
+                        break;
+                }
+
+                $("ul#form_sortable li div.icon_container img.settings").click(function(){
+                    settingsOpenedForElementId = $(this).closest("li div.icon_container").attr("id");        
+                    settingsOpenedForElementType = $("#" + settingsOpenedForElementId + " input").attr("class");
+                    $("#settings_dialog div").hide();
+                    $("#settings_dialog div#settings_" + settingsOpenedForElementType).show();
+                    $("#settings_dialog div#settings_" + settingsOpenedForElementType + " div").show();
+                    elementEdit();
+                    $("#settings_dialog").dialog("open"); 
+                });                
+                i++;
+              }
+        });
+        
+        function elementEdit()
+        {
+            var selectedId;
+            var selectedName;
+            var selectedLabel;
+            var selectedPlaceholder;
+            var selectedCols;
+            var selectedRows;
+            var selectedClass;
+            var selectedDescription;
+            var selectedValue;
+            switch("settings_" + settingsOpenedForElementType){
+                case "settings_textbox":
+                case "settings_password":
+                case "settings_uploadfield":
+                    selectedId = $("#" + settingsOpenedForElementId).closest("li").find("div.controls input").attr("id");
+                    selectedName = $("#" + settingsOpenedForElementId).closest("li").find("div.controls input").attr("name");
+                    selectedPlaceholer = $("#" + settingsOpenedForElementId).closest("li").find("div.controls input").attr("placeholder");
+                    selectedClass = $("#" + settingsOpenedForElementId).closest("li").find("div.controls input").attr("class");
+                    selectedLabel = $("#" + settingsOpenedForElementId).closest("li").find("div.control-group label.control-label").html();
+
+                    if( selectedId === "input_"+settingsOpenedForElementType){
+                        $("#settings_dialog #settings_" + settingsOpenedForElementType + " #field_id div.control-group div.controls input#input_id").val("");
+                    } else{
+                        $("#settings_dialog #settings_" + settingsOpenedForElementType + " #field_id div.control-group div.controls input#input_id").val(selectedId);
+                    }       
+                    if( selectedName === "name"){
+                        $("#settings_dialog #settings_" + settingsOpenedForElementType + " #field_name div.control-group div.controls input#input_name").val("");
+                    } else{
+                        $("#settings_dialog #settings_" + settingsOpenedForElementType + " #field_name div.control-group div.controls input#input_name").val(selectedName);
+                    }       
+                    if( selectedPlaceholer === "Placeholder"){
+                        $("#settings_dialog #settings_" + settingsOpenedForElementType + " #field_placeholder div.control-group div.controls input#input_placeholder").val("");
+                    } else{
+                        $("#settings_dialog #settings_" + settingsOpenedForElementType + " #field_placeholder div.control-group div.controls input#input_placeholder").val(selectedPlaceholer);
+                    }       
+                    if( selectedLabel === "Label"){
+                        $("#settings_dialog #settings_" + settingsOpenedForElementType + " #field_label div.control-group div.controls input#input_label").val("");
+                    } else{
+                        $("#settings_dialog #settings_" + settingsOpenedForElementType + " #field_label div.control-group div.controls input#input_label").val(selectedLabel);
+                    }   
+                    $("#settings_dialog #settings_" + settingsOpenedForElementType + " #field_class div.control-group div.controls input#input_class").val(selectedClass);
+                    break;
+
+                case "settings_textarea":
+                    selectedId = $("#" + settingsOpenedForElementId).closest("li").find("div.controls textarea").attr("id");
+                    selectedName = $("#" + settingsOpenedForElementId).closest("li").find("div.controls textarea").attr("name");
+                    selectedPlaceholer = $("#" + settingsOpenedForElementId).closest("li").find("div.controls textarea").attr("placeholder");
+                    selectedClass = $("#" + settingsOpenedForElementId).closest("li").find("div.controls textarea").attr("class");
+                    selectedCols = $("#" + settingsOpenedForElementId).closest("li").find("div.controls textarea").attr("cols");
+                    selectedRows = $("#" + settingsOpenedForElementId).closest("li").find("div.controls textarea").attr("rows");
+                    selectedLabel = $("#" + settingsOpenedForElementId).closest("li").find("div.control-group label.control-label").html();
+
+                    if( selectedId === "input_textarea"){
+                        $("#settings_dialog #settings_textarea #field_id div.control-group div.controls input#input_id").val("");
+                    } else{
+                        $("#settings_dialog #settings_textarea #field_id div.control-group div.controls input#input_id").val(selectedId);
+                    }       
+                    if( selectedName === "name"){
+                        $("#settings_dialog #settings_textarea #field_name div.control-group div.controls input#input_name").val("");
+                    } else{
+                        $("#settings_dialog #settings_textarea #field_name div.control-group div.controls input#input_name").val(selectedName);
+                    }       
+                    if( selectedPlaceholer === "Placeholder"){
+                        $("#settings_dialog #settings_textarea #field_placeholder div.control-group div.controls input#input_placeholder").val("");
+                    } else{
+                        $("#settings_dialog #settings_textarea #field_placeholder div.control-group div.controls input#input_placeholder").val(selectedPlaceholer);
+                    }       
+                    if( selectedLabel === "Label"){
+                        $("#settings_dialog #settings_textarea #field_label div.control-group div.controls input#input_label").val("");
+                    } else{
+                        $("#settings_dialog #settings_textarea #field_label div.control-group div.controls input#input_label").val(selectedLabel);
+                    }       
+                    if(selectedCols <= 0){
+                        $("#settings_dialog #settings_textarea #field_cols div.control-group div.controls input#input_cols").val(3);
+                    }else{
+                        $("#settings_dialog #settings_textarea #field_cols div.control-group div.controls input#input_cols").val(selectedCols);
+                    }
+                    if(selectedRows <= 0){
+                        $("#settings_dialog #settings_textarea #field_rows div.control-group div.controls input#input_rows").val(3);
+                    }else{
+                        $("#settings_dialog #settings_textarea #field_rows div.control-group div.controls input#input_rows").val(selectedRows);
+                    }
+                    $("#settings_dialog #settings_textarea #field_class div.control-group div.controls input#input_class").val(selectedClass);
+                    break;
+                    
+                case "settings_hidden":
+                    selectedId = $("#" + settingsOpenedForElementId).closest("li").find("div.controls input").attr("id");
+                    selectedName = $("#" + settingsOpenedForElementId).closest("li").find("div.controls input").attr("name");
+                    selectedClass = $("#" + settingsOpenedForElementId).closest("li").find("div.controls input").attr("class");
+
+                    if( selectedId === "input_hidden"){
+                        $("#settings_dialog #settings_hidden #field_id div.control-group div.controls input#input_id").val("");
+                    } else{
+                        $("#settings_dialog #settings_hidden #field_id div.control-group div.controls input#input_id").val(selectedId);
+                    }       
+                    if( selectedName === "name"){
+                        $("#settings_dialog #settings_hidden #field_name div.control-group div.controls input#input_name").val("");
+                    } else{
+                        $("#settings_dialog #settings_hidden #field_name div.control-group div.controls input#input_name").val(selectedName);
+                    }       
+                    $("#settings_dialog #settings_hidden #field_class div.control-group div.controls input#input_class").val(selectedClass);
+                    break;
+                    
+                case "settings_checkbox":
+                    selectedId = $("#" + settingsOpenedForElementId).closest("li").find("div.controls input").attr("id");
+                    selectedName = $("#" + settingsOpenedForElementId).closest("li").find("div.controls input").attr("name");
+                    selectedClass = $("#" + settingsOpenedForElementId).closest("li").find("div.controls input").attr("class");
+                    selectedDescription = $("#" + settingsOpenedForElementId).closest("li").find("div.controls span").html();
+                    selectedLabel = $("#" + settingsOpenedForElementId).closest("li").find("div.control-group label.control-label").html();
+
+                    if( selectedId === "input_checkbox"){
+                        $("#settings_dialog #settings_checkbox #field_id div.control-group div.controls input#input_id").val("");
+                    } else{
+                        $("#settings_dialog #settings_checkbox #field_id div.control-group div.controls input#input_id").val(selectedId);
+                    }       
+                    if( selectedName === "name"){
+                        $("#settings_dialog #settings_checkbox #field_name div.control-group div.controls input#input_name").val("");
+                    } else{
+                        $("#settings_dialog #settings_checkbox #field_name div.control-group div.controls input#input_name").val(selectedName);
+                    }       
+                    if( selectedLabel === "Label"){
+                        $("#settings_dialog #settings_checkbox #field_label div.control-group div.controls input#input_label").val("");
+                    } else{
+                        $("#settings_dialog #settings_checkbox #field_label div.control-group div.controls input#input_label").val(selectedLabel);
+                    }   
+                    $("#settings_dialog #settings_checkbox #field_class div.control-group div.controls input#input_class").val(selectedClass);
+                    $("#settings_dialog #settings_checkbox #field_description div.control-group div.controls textarea#textarea_description").val(selectedDescription);
+                    break;
+                    
+                case "settings_selectbox":
+                    selectedId = $("#" + settingsOpenedForElementId).closest("li").find("div.controls select").attr("id");
+                    selectedName = $("#" + settingsOpenedForElementId).closest("li").find("div.controls select").attr("name");
+                    selectedClass = $("#" + settingsOpenedForElementId).closest("li").find("div.controls select").attr("class");
+                    selectedLabel = $("#" + settingsOpenedForElementId).closest("li").find("div.control-group label.control-label").html();
+
+                    if( selectedId === "input_selectbox"){
+                        $("#settings_dialog #settings_selectbox #field_id div.control-group div.controls input#input_id").val("");
+                    } else{
+                        $("#settings_dialog #settings_selectbox #field_id div.control-group div.controls input#input_id").val(selectedId);
+                    }       
+                    if( selectedName === "name"){
+                        $("#settings_dialog #settings_selectbox #field_name div.control-group div.controls input#input_name").val("");
+                    } else{
+                        $("#settings_dialog #settings_selectbox #field_name div.control-group div.controls input#input_name").val(selectedName);
+                    }       
+                    if( selectedLabel === "Label"){
+                        $("#settings_dialog #settings_selectbox #field_label div.control-group div.controls input#input_label").val("");
+                    } else{
+                        $("#settings_dialog #settings_selectbox #field_label div.control-group div.controls input#input_label").val(selectedLabel);
+                    }   
+                    $("#settings_dialog #settings_selectbox #field_class div.control-group div.controls input#input_class").val(selectedClass);
+                    
+                    $("#settings_dialog #settings_selectbox #container_options ul#optionlist li").remove();
+                    
+                    $("#" + settingsOpenedForElementId).closest("li").find("div.controls select option").each(function() {
+                        var optionLabel = $(this).html();
+                        $("#hidden_elements #select_option_settings li span").html(optionLabel);
+                        $("#hidden_elements #select_option_settings li").clone().appendTo("#settings_dialog #settings_selectbox #container_options ul#optionlist");
+                    });
+                    
+                    break;
+                    
+                case "settings_radiobutton":
+                    selectedId = $("#" + settingsOpenedForElementId).closest("li").find("div.control-group input").attr("id");
+                    selectedName = $("#" + settingsOpenedForElementId).closest("li").find("div.control-group input").attr("name");
+                    selectedClass = $("#" + settingsOpenedForElementId).closest("li").find("div.control-group input").attr("class");
+                    selectedLabel = $("#" + settingsOpenedForElementId).closest("li").find("div.control-group label.control-label").html();
+
+                    if( selectedId === "input_radiobutton"){
+                        $("#settings_dialog #settings_radiobutton #field_id div.control-group div.controls input#input_id").val("");
+                    } else{
+                        $("#settings_dialog #settings_radiobutton #field_id div.control-group div.controls input#input_id").val(selectedId);
+                    }       
+                    if( selectedName === "name"){
+                        $("#settings_dialog #settings_radiobutton #field_name div.control-group div.controls input#input_name").val("");
+                    } else{
+                        $("#settings_dialog #settings_radiobutton #field_name div.control-group div.controls input#input_name").val(selectedName);
+                    }       
+                    if( selectedLabel === "Label"){
+                        $("#settings_dialog #settings_radiobutton #field_label div.control-group div.controls input#input_label").val("");
+                    } else{
+                        $("#settings_dialog #settings_radiobutton #field_label div.control-group div.controls input#input_label").val(selectedLabel);
+                    }   
+                    $("#settings_dialog #settings_radiobutton #field_class div.control-group div.controls input#input_class").val(selectedClass);
+                    
+                    $("#settings_dialog #settings_radiobutton #container_options ul#optionlist li").remove();
+                    
+                    $("#" + settingsOpenedForElementId).closest("li").find("div.controls div").each(function() {
+                        var optionLabel = $("> span", this).html();
+                        $("#hidden_elements #radio_option_settings li span").html(optionLabel);
+                        $("#hidden_elements #radio_option_settings li").clone().appendTo("#settings_dialog #settings_radiobutton #container_options ul#optionlist");
+                    });
+                    
+                    break;
+                    
+                case "settings_submit":
+                case "settings_button":
+                    selectedId = $("#" + settingsOpenedForElementId).closest("li").find("div.control-group input").attr("id");
+                    selectedName = $("#" + settingsOpenedForElementId).closest("li").find("div.control-group input").attr("name");
+                    selectedClass = $("#" + settingsOpenedForElementId).closest("li").find("div.control-group input").attr("class");
+                    selectedValue = $("#" + settingsOpenedForElementId).closest("li").find("div.control-group div.controls input").attr("value");
+
+                    if( selectedId === "input_button"){
+                        $("#settings_dialog #settings_" + settingsOpenedForElementType + " #field_id div.control-group div.controls input#input_id").val("");
+                    } else{
+                        $("#settings_dialog #settings_" + settingsOpenedForElementType + " #field_id div.control-group div.controls input#input_id").val(selectedId);
+                    }       
+                    if( selectedName === "name"){
+                        $("#settings_dialog #settings_" + settingsOpenedForElementType + " #field_name div.control-group div.controls input#input_name").val("");
+                    } else{
+                        $("#settings_dialog #settings_" + settingsOpenedForElementType + " #field_name div.control-group div.controls input#input_name").val(selectedName);
+                    }       
+                    $("#settings_dialog #settings_" + settingsOpenedForElementType + " #field_class div.control-group div.controls input#input_class").val(selectedClass);
+                    $("#settings_dialog #settings_" + settingsOpenedForElementType + " #field_value div.control-group div.controls input#input_value").val(selectedValue);
+                    break;
+            }
+                    
+        }
+        
+        
+        $("#input_rows").keyup(function() {
+            this.value = this.value.replace(/[^0-9\.]/g, '');
+        });
+        $("#input_cols").keyup(function() {
+            this.value = this.value.replace(/[^0-9\.]/g, '');
+        });
+        
+        $(".save_btn").click(function(){
+            var formStructure = "{";
+            var k = 0;
+            
+            $("#container_form ul#form_sortable li").each(function(){
+                var id = "";
+                var name = "";
+                var label = "";
+                var placeholder = "";
+                var element_class = "";
+                var rows = "";
+                var cols = "";
+                var description = "";
+                var options = "";
+                var element_value = "";
+                    
+                var elementType = $("> div:first span", this).html();
+                elementType = elementType.replace("Element : ", "");
+                
+                switch (elementType) {
+                    case "Textbox":
+                    case "Password":
+                    case "Uploadfield":
+                        if(elementType === "Textbox") elementType = "textbox";
+                        if(elementType === "Password") elementType = "password";
+                        if(elementType === "Uploadfield") elementType = "uploadfield";
+                        id = $("> div:last-child div.controls input", this).attr("id");
+                        name = $("> div:last-child div.controls input", this).attr("name");
+                        placeholder = $("> div:last-child div.controls input", this).attr("placeholder");
+                        label = $("> div:last-child label", this).html();
+                        element_class = $("> div:last-child div.controls input", this).attr("class");
+                        
+                        formStructure += "'" + k + "':{'" + elementType + "':{'id':'" + id + "','class':'" + element_class + "','name':'" + name + "','placeholder':'" + placeholder + "','label':'" + label + "'}},";
+                        break;
+                        
+                    case "Textarea":
+                        id = $("> div:last-child div.controls textarea", this).attr("id");
+                        name = $("> div:last-child div.controls textarea", this).attr("name");
+                        rows = $("> div:last-child div.controls textarea", this).attr("rows");
+                        cols = $("> div:last-child div.controls textarea", this).attr("cols");
+                        element_class = $("> div:last-child div.controls textarea", this).attr("class");
+                        label = $("> div:last-child label", this).html();
+                        
+                        formStructure += "'" + k + "':{'textarea':{'id':'" + id + "','class':'" + element_class + "','name':'" + name + "','label':'" + label + "','rows':'" + rows + "','cols':'" + cols + "'}},";
+                        break;
+                        
+                    case "Hidden":
+                        id = $("> div:last-child div.controls input", this).attr("id");
+                        name = $("> div:last-child div.controls input", this).attr("name");
+                        element_class = $("> div:last-child div.controls input", this).attr("class");
+                        
+                        formStructure += "'" + k + "':{'hidden':{'id':'" + id + "','class':'" + element_class + "','name':'" + name + "'}},";
+                        break;
+                        
+                    case "Checkbox":
+                        id = $("> div:last-child div.controls input", this).attr("id");
+                        name = $("> div:last-child div.controls input", this).attr("name");
+                        element_class = $("> div:last-child div.controls input", this).attr("class");
+                        description = $("> div:last-child div.controls span", this).html();
+                        label = $("> div:last-child label", this).html();
+                        
+                        formStructure += "'" + k + "':{'checkbox':{'id':'" + id + "','class':'" + element_class + "','name':'" + name + "','description':'" + description + "','value':'1','label':'" + label + "'}},";
+                        break;
+                        
+                    case "Selectbox":
+                        id = $("> div:last-child div.controls select", this).attr("id");
+                        name = $("> div:last-child div.controls select", this).attr("name");
+                        element_class = $("> div:last-child div.controls select", this).attr("class");
+                        label = $("> div:last-child label", this).html();
+                        
+                        $("> div:last-child div.controls select option", this).each(function(){
+                            options += "'" + $(this).html() + "':'" + $(this).attr("value") + "',";
+                        });
+                        
+                        options = options.substr(0, options.length - 1);
+                        
+                        formStructure += "'" + k + "':{'selectbox':{'id':'" + id + "','class':'" + element_class + "','name':'" + name + "','label':'" + label + "','options':{" + options + "}}},";
+                        break;
+                        
+                    case "Radiobutton":
+                        id = $("> div:last-child input", this).attr("id");
+                        name = $("> div:last-child input", this).attr("name");
+                        element_class = $("> div:last-child input", this).attr("class");
+                        label = $("> div:last-child label", this).html();
+                        
+                        $("> div:last-child div.controls div", this).each(function(){
+                            options += "'" + $("> span",this).html() + "':'" + $("> input",this).attr("value") + "',";
+                        });
+                        
+                        options = options.substr(0, options.length - 1);
+                        
+                        formStructure += "'" + k + "':{'radiobutton':{'id':'" + id + "','class':'" + element_class + "','name':'" + name + "','label':'" + label + "','options':{" + options + "}}},";
+                        break;
+                        
+                    case "Submit":
+                    case "Button":
+                        var btnType = "";
+                        if(elementType === "Submit"){
+                            btnType = "submit";
+                        } else {
+                            btnType = "button";
+                        }
+                        
+                        id = $("> div:last-child input", this).attr("id");
+                        element_class = $("> div:last-child input", this).attr("class");
+                        element_value = $("> div:last-child div.controls input", this).val();
+                        
+                        formStructure += "'" + k + "':{'" + btnType + "':{'id':'" + id + "','class':'" + element_class + "','value':'" + element_value + "'}},";
+                        break;
+                }
+                k++;
+            });
+            
+            formStructure = formStructure.substr(0, formStructure.length - 1);
+            formStructure += "}";
+            $("#container_formdata form#saveFormData input#formStructure").val(formStructure);
+            $("#container_formdata form#saveFormData").submit();
+        });
+        
+        
+        $("#settings_selectbox ul").sortable({
+            axis: "y",
+            handle: "img.move_handler",
+            containment: "#settings_selectbox ul"
+        });
+        $("#settings_radiobutton ul").sortable({
+            axis: "y",
+            handle: "img.move_handler",
+            containment: "#settings_radiobutton ul"
+        });
+        
+        $("#add_select_option").click(function(){
+            var addOptionLabel = $(this).closest("div").find("input#input_optionname").val();
+            if(addOptionLabel !== ""){
+                $("#hidden_elements #select_option_settings li span").html(addOptionLabel);
+                $("#hidden_elements #select_option_settings li").clone().appendTo("#settings_dialog #settings_selectbox #container_options ul#optionlist");
+            }
+            $(this).closest("div").find("input#input_optionname").val("");
+        });
+        
+        $("#add_radio_option").click(function(){
+            var addOptionLabel = $(this).closest("div").find("input#input_optionname").val();
+            if(addOptionLabel !== ""){
+                $("#hidden_elements #radio_option_settings li span").html(addOptionLabel);
+                $("#hidden_elements #radio_option_settings li").clone().appendTo("#settings_dialog #settings_radiobutton #container_options ul#optionlist");
+            }
+            $(this).closest("div").find("input#input_optionname").val("");
+        });
+        
+        buildSavedForm();
+        function buildSavedForm(){
+           <?php foreach($this->formArray as $formElement){
+                    foreach($formElement as $type => $values){
+                        echo '$("#hidden_elements #'. $type .' li div.icon_container").attr("id", "element_" + i);'.PHP_EOL;
+                        echo '$("#hidden_elements #'. $type .' li").clone().appendTo("#container_form ul");'.PHP_EOL;
+                        echo '$("#element_" + i).closest("li").find("div.control-group label.control-label").attr("for","'. $values["id"] .'");'.PHP_EOL;
+                        echo '$("#element_" + i).closest("li").find("div.control-group label.control-label").html("'. $values["label"] .'");'.PHP_EOL;
+
+                        if($type == "radiobutton" || $type == "selectbox"){
+                            echo '$("#element_" + i).closest("li").find("div.control-group input").attr("id","'. $values["id"] .'");'.PHP_EOL;
+                            echo '$("#element_" + i).closest("li").find("div.control-group input").attr("class","'. $values["class"] .'");'.PHP_EOL;
+                            echo '$("#element_" + i).closest("li").find("div.control-group input").attr("name","'. $values["name"] .'");'.PHP_EOL;
+                        }else if($type == "button" || $type == "submit"){
+                            echo '$("#element_" + i).closest("li").find("div.control-group > input").attr("id","'. $values["id"] .'");'.PHP_EOL;
+                            echo '$("#element_" + i).closest("li").find("div.control-group > input").attr("class","'. $values["class"] .'");'.PHP_EOL;
+                            echo '$("#element_" + i).closest("li").find("div.control-group div.controls > input").attr("value","'. $values["value"] .'");'.PHP_EOL;
+                        }else if($type == "textarea"){
+                            echo '$("#element_" + i).closest("li").find("div.control-group div.controls textarea").attr("id","'. $values["id"] .'");'.PHP_EOL;
+                            echo '$("#element_" + i).closest("li").find("div.control-group div.controls textarea").attr("name","'. $values["name"] .'");'.PHP_EOL;
+                            echo '$("#element_" + i).closest("li").find("div.control-group div.controls textarea").attr("class","'. $values["class"] .'");'.PHP_EOL;
+                        }else{
+                            echo '$("#element_" + i).closest("li").find("div.control-group div.controls input").attr("id","'. $values["id"] .'");'.PHP_EOL;
+                            echo '$("#element_" + i).closest("li").find("div.control-group div.controls input").attr("name","'. $values["name"] .'");'.PHP_EOL;
+                            echo '$("#element_" + i).closest("li").find("div.control-group div.controls input").attr("class","'. $values["class"] .'");'.PHP_EOL;
+                            echo '$("#element_" + i).closest("li").find("div.control-group div.controls input").attr("placeholder","'. $values["placeholder"] .'");'.PHP_EOL;
+                        }
+
+                        if($type == "radiobutton"){
+                            echo '$("#element_" + i).closest("li").find("div.controls div").remove();'.PHP_EOL;
+                            foreach($values["options"] as $optionLabel => $val){
+                                echo '$("#hidden_elements #radio_option div span").html("'. $optionLabel .'");'.PHP_EOL;
+                                echo '$("#hidden_elements #radio_option div input").attr("value","'. $val .'");'.PHP_EOL;
+                                echo '$("#hidden_elements #radio_option div input").attr("name", "'. $values["name"] .'");'.PHP_EOL;
+                                echo '$("#hidden_elements #radio_option div").clone().appendTo($("#element_" + i).closest("li").find("div.controls"));'.PHP_EOL;
+                            }
+                        }else if($type == "selectbox"){
+                            echo '$("#element_" + i).closest("li").find("div.controls select option").remove();'.PHP_EOL;
+                            foreach($values["options"] as $optionLabel => $val){
+                                echo '$("#hidden_elements #select_option option").html("'. $optionLabel .'");'.PHP_EOL;
+                                echo '$("#hidden_elements #select_option option").attr("value","'. $val .'");'.PHP_EOL;
+                                echo '$("#hidden_elements #select_option option").clone().appendTo($("#element_" + i).closest("li").find("div.controls select"));'.PHP_EOL;
+                            }
+                        }
+                        echo 'i++;'.PHP_EOL;
+                        break;
+                    }
+           }; ?>
+        }
+        
+        $("ul#form_sortable li div.icon_container img.settings").click(function(){
+            settingsOpenedForElementId = $(this).closest("li div.icon_container").attr("id");        
+            settingsOpenedForElementType = $("#" + settingsOpenedForElementId + " input").attr("class");
+            $("#settings_dialog div").hide();
+            $("#settings_dialog div#settings_" + settingsOpenedForElementType).show();
+            $("#settings_dialog div#settings_" + settingsOpenedForElementType + " div").show();
+            elementEdit();
+            $("#settings_dialog").dialog("open"); 
+        }); 
+        
+        tinyMCE.init({
+            width : 700,
+            height : 400,
+			mode : "specific_textareas",
+			editor_selector : "mceEditor",
+			theme : "advanced",
+			language : "de",
+			content_css : "<?php echo $this->urlResource; ?>" + "tinyeditorarea.css",
+			plugins : "advimage,advlink,fullscreen,visualchars,paste,table",
+			theme_advanced_buttons1 : "bold,italic,bullist,numlist,justifyleft,justifycenter,justifyright,justifyfull,outdent,indent,sub,sup,formatselect,image,link,unlink,hr",
+			theme_advanced_buttons2 : "pastetext,pasteword,selectall,undo,redo,removeformat,charmap,fullscreen,help,visualchars,code,cut,copy,paste,charmap,visualaid",
+			theme_advanced_buttons3 : "tablecontrols,table,row_props,cell_props,delete_col,delete_row,col_after,col_before,row_after,row_before,split_cells,merge_cells",
+			theme_advanced_toolbar_location : "top",
+			theme_advanced_toolbar_align : "left",
+			theme_advanced_path_location : "bottom",
+			theme_advanced_resize_horizontal : false,
+			theme_advanced_resizing : false,
+			external_image_list_url : "example_image_list.js",
+            file_browser_callback : "lw_filebrowser",
+			convert_urls : false,
+		    relative_urls : false,
+			remove_script_host : false,
+            fullscreen_settings : {
+				theme_advanced_path_location : "top"
+			}		    
+		});
+		
+        function lw_filebrowser (field_name, url, type, win) {
+
+            //alert("Field_Name: " + field_name + "\nURL: " + url + "\nType: " + type + "\nWin: " + win); // debug/testing
+            
+            tinyMCE.activeEditor.windowManager.open({
+                file : "<?php echo $this->baseUrl; ?>&obj=filelist&view=popup&type="+type,
+                title : 'Contentory File Browser',
+                width : 800,
+                height : 600,
+                resizable : "yes",
+                inline : "no",  // This parameter only has an effect if you use the inlinepopups plugin!
+                close_previous : "no"
+            }, {
+                window : win,
+                input : field_name
+            });
+            return false;
+        }
+    });
+</script>
+
+<style>
+    body{background-color: #7F7F7F!important}
+
+    .clearfix:after {
+        content: ".";
+        display: block;
+        clear: both;
+        visibility: hidden;
+        line-height: 0;
+        height: 0;
+    }
+    .clearfix {
+        display: inline-block;
+    }
+
+    #lwPageTreeNav{height: 100%;}
+    #lw_fe_inputelement_lw_formular_template{width: 800px;height: 600px;}
+    #tabs ul li a{color: #fff;}
+
+    .activeline {background: #e8f2ff !important;}
+
+    .active, .active2{background-color: #777;}
+
+    .description {
+        margin-bottom: 0px;
+        border:1px solid #aaa;
+        border-radius: 5px;
+        background-color:#eee;
+        padding:10px;
+    }
+
+    legend.lwadminform {
+        height: 20px;
+        margin-bottom: 2px;
+        line-height: 20px;
+        width: 93px;
+    }
+    html body div#lwContent div {
+        font-size: 12px!important;
+    }
+
+    fieldset.lwadminform {
+        position: relative;
+    }
+
+
+    html body div#lwLeftnavi div#lwPageTreeNav.lwBoxLeftContent center form#gotoform input#gotoid {
+        width: 45px;
+        margin-bottom: 0;
+        background-color: #fff;
+    }
+    html body div#lwLeftnavi div#lwPageTreeNav.lwBoxLeftContent center {
+        height: 35px;
+    }    
+
+    #container{
+        background-color: #fff;
+        border: 1px solid #bbb;
+        border-radius: 10px;
+        padding: 10px;
+        height: auto;
+    }
+    
+    #container .description {
+        margin: 0px 20px 40px 20px;
+    }
+
+    #container ul.ui-tabs-nav{
+        border-bottom-left-radius: 0px;
+        border-bottom-right-radius: 0px;
+        padding-left: 10px;
+    }
+    
+    #container ul.ui-tabs-nav li{
+        border-top-right-radius: 5px;
+        border-top-left-radius: 5px;
+    }
+    
+    #container ul.ui-tabs-nav li a{
+        color: #fff;
+        margin-bottom: -1px;
+        height: 25px;
+        padding: 0 10px;
+        margin-bottom: -1px;
+        border-top-right-radius: 5px;
+        border-top-left-radius: 5px;
+        font-weight: bold;
+    }
+    
+    #container ul.ui-tabs-nav li a.active{
+        background-color: #777;
+        
+    }
+    
+    #container_form_elements{
+        background-color: #ccc;
+        float: left;
+        width: 200px;
+        padding: 10px;
+        padding-top: 25px;
+        border-bottom-right-radius: 5px;
+    }
+    
+    #container_form_elements h3.form_category_title{
+        font-size: 12px;
+        margin: 0;
+        padding: 0 0 0 10px;
+        height: 20px;
+        line-height: 20px;
+        color: #fff;
+        background-color: #333;
+        cursor: pointer;
+        font-style: italic;
+    }
+
+    #container_form_elements h3.form_category_title:hover{background-color: #555;}
+    
+    #container_form_elements span.form_elemente_headline{
+        background-color: #fff;
+        border: 1px solid #999;
+        border-bottom: none;
+        border-top-right-radius: 5px;
+        border-top-left-radius: 5px;
+        padding: 5px 5px 3px 5px;
+        margin-left: 10px;
+    }
+
+    #container_form_elements_inner{
+        background-color: #fff;
+        height: 300px;
+        padding: 10px;
+        border-radius: 5px;
+        border: 1px solid #999;
+    }
+    
+    #container_form_elements_inner ul{
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: none;
+    }
+    
+    #container_form_elements_inner ul li{
+        margin: 0;
+        padding-left: 20px;
+    }
+    
+    #container_form_elements_inner ul li:hover{
+        background-color: #eee;
+        cursor: pointer;
+    }
+    
+    #container_form_elements_inner ul#form_elements_text{display: block;}
+    
+    #container_formbuilder, #container_basedata {
+        width: 99.8%;
+        padding: 0;
+        margin: auto;
+        border: 1px solid #ccc;
+        border-top: none;
+    }
+    
+    #container_form{
+        float: left;
+        padding: 10px;
+        width: 820px;
+    }
+
+    #hidden_elements{display: none;}
+    
+    div.controls input{height: 30px;}
+    
+    #container_form ul#form_sortable{
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        min-height: 300px;
+    }
+    
+    #container_form ul#form_sortable li{
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        margin: 10px 5px 10px 0;
+        background-color: #fff;
+    }
+    
+    #container_form ul#form_sortable textarea{
+        width: 205px;
+        height: 80px;
+    }
+    
+    #container_form ul#form_otrtable li div.icon_container img{padding: 5px;}
+    #container_form ul#form_otrtable li div.icon_container span{
+        margin-left: 20px;
+        font-size: 10px;
+        font-style: italic;
+    }
+    
+    #ui-dialog-title-settings_dialog{font-size: 12px;}
+    .ui-dialog-buttonset button span.ui-button-text{font-size: 12px;}
+    #settings_dialog form {padding-top: 30px;}
+    
+    #settings_textbox{display: none;}
+    
+    #settings_selectbox ul#optionlist,#settings_radiobutton ul#optionlist{
+        list-style: none;
+        margin: 0;
+        padding: 10px 0 10px 150px;
+    }
+    
+    #settings_selectbox ul#optionlist li,#settings_radiobutton ul#optionlist li{
+        margin-top: 5px;
+        padding: 5px 5px 5px 10px;
+        width: 235px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #eee;
+    }
+
+    #container_formdata{padding: 0;}
+    #container_formdata_tabs ul {
+        border-top-left-radius: 0!important;
+        border-top-right-radius: 0!important;
+        border-top: none!important;
+        border-right: none!important;
+        border-left: none!important;
+    }
+    
+    #container_formdata_tabs {
+        padding: 0!important;
+        border-top-left-radius: 0;
+        border-top-right-radius: 0;
+        border-top: none;
+    }
+    
+    #container_formdata_tabs #allgemein,
+    #container_formdata_tabs #email_rueckmeldung,
+    #container_formdata_tabs #bestaetigungs_seite,
+    #container_formdata_tabs #sprache_de,
+    #container_formdata_tabs #sprache_en{
+        padding: 20px;
+        margin-top: 20px;
+    }
+    
+    #container_formdata_tabs #allgemein textarea,
+    #container_formdata_tabs #email_rueckmeldung textarea{
+        width: 400px;
+        height: 150px;
+    }
+    
+    #container_formdata_tabs input[type=text] {
+        width: 400px;
+    }
+    
+    #container_formdata_tabs div.control-group label sup{
+        padding-left: 5px!important;
+        font-weight: bold!important;
+    }
+    
+    .ui-tabs .ui-tabs-panel{
+        padding-top: 0!important;
+        
+    }
+    
+    div.error{
+        background-color: darkred;
+        padding: 5px;
+        margin-bottom: 10px; 
+        font-size: 15px;
+        font-weight: bold;
+        text-align: center;
+        border-radius: 10px;
+        width: 95%;
+    }
+    div.error p{ color: #fff;}
+</style>
+<!-- ######################################## Content ####################################################### -->
+<fieldset class="lwadminform">
+    <legend class="lwadminform">lw_formbuilder</legend>
+    <div id="container">
+        <ul>
+            <li><a href="#container_formbuilder" class="active">Builder</a></li>
+            <li><a href="#container_formdata">Grunddaten</a></li>
+        </ul>
+        
+        <div id="container_formbuilder" class="clearfix" style="position: relative;">
+            <div id="container_form_elements" >
+                <span class="form_elemente_headline">Form Elemente</span>
+                <div id="container_form_elements_inner">
+                    <h3 class="form_category_title" onclick="$('#container_form_elements_inner ul').slideUp();$('#container_form_elements_inner ul#form_elements_text').slideDown();">Text</h3>
+                    <ul id="form_elements_text">
+                        <li id="add_textbox">Textbox</li>
+                        <li id="add_textarea">Textarea</li>
+                        <li id="add_password">Password</li>
+                        <li id="add_hidden">Hidden</li>
+                    </ul>
+                    <h3 class="form_category_title" onclick="$('#container_form_elements_inner ul').slideUp();$('#container_form_elements_inner ul#form_elements_button').slideDown();">Button</h3>
+                    <ul id="form_elements_button">
+                        <li id="add_button">Button</li>
+                        <li id="add_submit">Submit</li>
+                    </ul>
+                    <h3 class="form_category_title" onclick="$('#container_form_elements_inner ul').slideUp();$('#container_form_elements_inner ul#form_elements_option').slideDown();">Option</h3>
+                    <ul id="form_elements_option">
+                        <li id="add_checkbox">Checkbox</li>
+                        <li id="add_radiobutton">Radiobutton</li>
+                        <li id="add_selectbox">Selectbox</li>
+                    </ul>
+                    <h3 class="form_category_title" onclick="$('#container_form_elements_inner ul').slideUp();$('#container_form_elements_inner ul#form_elements_file').slideDown();">File</h3>
+                    <ul id="form_elements_file">
+                        <li id="add_uploadfield">Uploadfield</li>
+                    </ul>
+                </div>
+                <div style="margin-top:15px;">
+                    <input class="btn btn-primary save_btn" type="button" value="speichern" />&nbsp;<input style="margin-left:7px;" class="btn" type="button" value="abbrechen" onclick="document.location.href = '?obj=content';"/>
+                </div>
+            </div>
+            <div id="container_form">
+                <form id="form" class="form-horizontal">
+                    <ul id="form_sortable">
+                    </ul>
+                </form>
+            </div>
+        </div>
+        
+        <div id="container_formdata">
+            <form id="saveFormData" action="<?php echo $this->actionUrl; ?>" method="POST" class="form-horizontal">
+                <input type="hidden" name="sent" value="1">
+                <input type="hidden" id="formStructure" name="formStructure" value="">
+                
+                <div id="container_formdata_tabs">
+                    <ul>
+                        <li><a href="#allgemein" class="active2">Allgemein</a></li>
+                        <li><a href="#email_rueckmeldung" >E-Mail R&uuml;ckmeldung</a></li>
+                        <li><a href="#bestaetigungs_seite" >Best&auml;tigungs-Seite</a></li>
+                        <li><a href="#sprache_de" >Sprache: DE</a></li>
+                        <li><a href="#sprache_en" >Sprache: EN</a></li>
+                    </ul>
+
+                    <div id="allgemein">
+                        <div class="control-group">
+                            <label class="control-label" for="baseData_title">Titel</label>
+                            <div class="controls">
+                                <input type="text" id="baseData_title" name="title" value="<?php if($this->baseData["general"]["title"]) echo $this->baseData["general"]["title"]; ?>">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="baseData_csv">CSV<sup>1</sup></label>
+                            <div class="controls">
+                                <input type="checkbox" id="baseData_csv" name="csv" value="1" <?php if($this->baseData["general"]["csv"]): ?> checked="checked" <?php endif; ?>>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="baseData_mail">E-Mail<sup>2</sup></label>
+                            <div class="controls">
+                                <input type="checkbox" id="baseData_mail" name="mail" value="1" <?php if($this->baseData["general"]["mail"]): ?> checked="checked" <?php endif; ?>>
+                            </div>
+                        </div>
+                        <?php if ($this->errors && array_key_exists("mail_sender", $this->errors)) : ?>
+                            <?php if (array_key_exists(5, $this->errors["mail_sender"])): ?>
+                                <div class="error">
+                                    <p>Es wurde keine g&uuml;ltige Absender-Adresse eingegeben.</p>
+                                </div>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                        <div class="control-group">
+                            <label class="control-label" for="baseData_mail_sender">E-Email-Absender<sup>3</sup></label>
+                            <div class="controls">
+                                <input type="text" id="baseData_mail_sender" name="mail_sender" value="<?php if($this->baseData["general"]["mail_sender"]) echo $this->baseData["general"]["mail_sender"]; ?>">
+                            </div>
+                        </div>
+                        <?php if ($this->errors && array_key_exists("mail_reciever", $this->errors)) : ?>
+                            <?php if (array_key_exists(5, $this->errors["mail_reciever"])): ?>
+                                <div class="error">
+                                    <p>Eine oder mehrere, der eingebenen, E-Mail Adressen ist/sind nicht korrekt.</p>
+                                </div>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                        <div class="control-group">
+                            <label class="control-label" for="baseData_mail_reciever">Empf&auml;nger<sup>4</sup></label>
+                            <div class="controls">
+                                <textarea id="baseData_mail_reciever" name="mail_reciever"><?php if($this->baseData["general"]["mail_reciever"]) echo $this->baseData["general"]["mail_reciever"]; ?></textarea> <span class="form_info">(z.B. "ich@meine-domain.de")</span>
+                            </div>
+                        </div>
+                        <?php if ($this->errors && array_key_exists("url_error", $this->errors)) : ?>
+                            <?php if (array_key_exists(12, $this->errors["url_error"])): ?>
+                                <div class="error">
+                                    <p>Es wurde keine g&uuml;ltige Fehler-Url eingegeben. Eventuell fehlt ein "http://" oder "https://".</p>
+                                </div>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                        <div class="control-group">
+                            <label class="control-label" for="baseData_url_error">Fehler-Url</label>
+                            <div class="controls">
+                                <input type="text" id="baseData_url_error" name="url_error" value="<?php if($this->baseData["general"]["url_error"]) echo $this->baseData["general"]["url_error"]; ?>"> <span class="form_info">(z.B. "http://www.meine-domain.de/error.html")</span>
+                            </div>
+                        </div>
+                        <?php if ($this->errors && array_key_exists("url_success", $this->errors)) : ?>
+                            <?php if (array_key_exists(12, $this->errors["url_success"])): ?>
+                                <div class="error">
+                                    <p>Es wurde keine g&uuml;ltige Erfolg-Url eingegeben. Eventuell fehlt ein "http://" oder "https://".</p>
+                                </div>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                        <div class="control-group">
+                            <label class="control-label" for="baseData_url_success">Erfolg-Url</label>
+                            <div class="controls">
+                                <input type="text" id="baseData_url_success" name="url_success" value="<?php if($this->baseData["general"]["url_success"]) echo $this->baseData["general"]["url_success"]; ?>"> <span class="form_info">(z.B. "http://www.meine-domain.de/success.html")</span>
+                            </div>
+                        </div>
+                        <?php if ($this->errors && array_key_exists("max_registrations", $this->errors)) : ?>
+                            <?php if (array_key_exists(6, $this->errors["max_registrations"])): ?>
+                                <div class="error">
+                                    <p>Die Anzahl an Registrierungen darf nur aus Zahlen bestehen.</p>
+                                </div>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                        <div class="control-group">
+                            <label class="control-label" for="baseData_max_registrations">Anzahl max. Anmeldungen</label>
+                            <div class="controls">
+                                <input type="text" id="baseData_max_registrations" name="max_registrations" value="<?php if($this->baseData["general"]["max_registrations"]) echo $this->baseData["general"]["max_registrations"]; ?>"> <span class="form_info">Anzahl der maximal m&ouml;glichen Anmeldungen</span>
+                            </div>
+                        </div>
+                        <?php if ($this->errors && array_key_exists("url_full", $this->errors)) : ?>
+                            <?php if (array_key_exists(12, $this->errors["url_full"])): ?>
+                                <div class="error">
+                                    <p>Es wurde keine g&uuml;ltige Ausgebucht-Url eingegeben. Eventuell fehlt ein "http://" oder "https://".</p>
+                                </div>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                        <div class="control-group">
+                            <label class="control-label" for="baseData_url_full">"ausgebucht"-Url</label>
+                            <div class="controls">
+                                <input type="text" id="baseData_url_full" name="url_full" value="<?php if($this->baseData["general"]["url_full"]) echo $this->baseData["general"]["url_full"]; ?>"> <span class="form_info">(z.B. "http://www.meine-domain.de/full.html")</span>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="baseData_url_target_top">Urls: Target=top</label>
+                            <div class="controls">
+                                <input type="checkbox" id="baseData_url_target_top" name="urls_target_top" value="1" <?php if($this->baseData["general"]["urls_target_top"]): ?> checked="checked" <?php endif; ?>>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="email_rueckmeldung">
+                        <div class="description">
+                            <div style="font-style: italic;">
+                                Best&auml;tigungsmail-E-Mail, welche an die Besucher verschickt wird, die das Online Formular ausf&uuml;llen.
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="baseData_formfieldname_email">Feldname E-Mail<sup>5</sup></label>
+                            <div class="controls">
+                                <input type="text" id="baseData_formfieldname_email" name="formfieldname_email" value="<?php if($this->baseData["emailResponse"]["formfieldname_email"]) echo $this->baseData["emailResponse"]["formfieldname_email"]; ?>">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="baseData_subject">Betreff</label>
+                            <div class="controls">
+                                <input type="text" id="baseData_subject" name="subject" value="<?php if($this->baseData["emailResponse"]["subject"]) echo $this->baseData["emailResponse"]["subject"]; ?>">
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="baseData_return_mail">Kopftext Mail<sup>6</sup></label>
+                            <div class="controls">
+                                <textarea id="baseData_return_mail" name="return_mail"><?php if($this->baseData["emailResponse"]["return_mail"]) echo $this->baseData["emailResponse"]["return_mail"]; ?></textarea>
+                            </div>
+                        </div>                        
+                    </div>
+                    
+                    <div id="bestaetigungs_seite">
+                        <div class="description">
+                            <div style="font-style: italic;">
+                                Zwischenseite die dem Benutzer des Formulars zur Kontrolle angezeigt wird, bevor die Daten endg&uuml;ltig abgeschickt werden.
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="baseData_use_confirm_page">benutzen</label>
+                            <div class="controls">
+                                <input type="checkbox" id="baseData_use_confirm_page" name="use_confirm_page" value="1" <?php if($this->baseData["confirmPage"]["use_confirm_page"]): ?> checked="checked" <?php endif; ?>>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="baseData_confirm_text">Best&auml;tigungs-Text<sup>7</sup></label>
+                            <div class="controls">
+                                <textarea id="baseData_confirm_text" name="confirm_text" class="mceEditor"><?php if($this->baseData["confirmPage"]["confirm_text"]) echo html_entity_decode($this->baseData["confirmPage"]["confirm_text"]); ?></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="sprache_de">
+                        <input type="radio" style="margin-top: -2px;margin-right: 10px;" value="de" name="selectedLang" <?php if($this->params["selectedLang"] == "de" || $this->params["selectedLang"] == ""): ?>checked="checked"<?php endif; ?>>deutsche Ausgabe verwerden?<br><br>
+                        <div style="margin-top: 20px;">
+                            <?php echo $this->de; ?>
+                        </div>
+                    </div>
+                    <div id="sprache_en">
+                        <input type="radio" style="margin-top: -2px;margin-right: 10px;" value="en" name="selectedLang" <?php if($this->params["selectedLang"] == "en"): ?>checked="checked"<?php endif; ?>>englische Ausgabe verwerden?<br><br>
+                        <div style="margin-top: 20px;">
+                            <?php echo $this->en; ?>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    <div style="margin:15px 0 20px 180px;">
+                        <input class="btn btn-primary save_btn" type="button" value="speichern" />&nbsp;<input style="margin-left:7px;" class="btn" type="button" value="abbrechen" onclick="document.location.href = '?obj=content';"/>&nbsp;<input style="margin-left:7px;" class="btn" type="button" value="CSV ansehen"/>&nbsp;<input style="margin-left:7px;" class="btn" type="button" value="CSV herunterladen"/>
+                    </div>
+                    <div class="description">
+                        <ol>
+                            <li>Die Formulardaten werden in einer CSV-Datei gespeichert.</li>
+                            <li>Die Formulardaten werden an die in "Empf&auml;nger" hinterlegte E-Mail Adressen geschickt.</li>
+                            <li>Diese Adresse wird als Absender-Adresse der E-Mails verwendet. Eingabe ist optional, wenn keine Adresse angegeben wird, wird die im System hinterlegte Adresse verwendet.</li>
+                            <li>Wenn "E-Mail" ausgew&auml;hlt wurde, werden die Formdaten an die hier hinterlegten E-Mail Adressen verschickt. Jede E-Mail Adresse in eine eigene Zeile schreiben!</li>
+                            <li>Bitte den Feldnamen des Formulares angeben, der die E-Mailadresse des Empf&auml;ngers enth&auml;lt. Dieses Feld muss auf required gesetzt werden und die E-Mail&uuml;berpr&uuml;fung muss aktiviert sein!</li>
+                            <li>Dieser Text wird im Falle einer E-Mailr&uuml;ckmeldung in der E-Mail verwendet. Um die Daten in der E-Mail anzuzeigen, bitte den Platzhalter {_data_} verwenden!</li>
+                            <li>Dieser Text wird im Falle der Anzeige einer Best&auml;tigungsseite verwendet. Um die Daten auf der Seite anzuzeigen bitte den Platzhalter {_data_} verwenden!</li>
+                            <li>Der Platzhalter {_data_} f&uuml;gt hier den zu &uuml;bergebenden Wert in die Fehlermeldung ein. (z.B. "maximale Zeichen" oder "Datum")</li>
+                        </ol>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</fieldset>
+<!-- ######################################################################################################## -->
+<!-- ######################################## Versteckte Cloning-Elemente ################################### -->
+<div id="hidden_elements">
+    <div id="textbox">
+        <li>
+            <div class="icon_container">
+                <input type="hidden" class="textbox">
+                <img class="move_handler" style="cursor:move;" src="<?php echo $this->iconArrows; ?>">
+                <span>Element : Textbox</span>
+                <img class="delete" style="float:right;padding: 5px;cursor:pointer;" src="<?php echo $this->iconCross; ?>" onclick="if(confirm('Dieses Element wirklich l&ouml;schen ?')){$(this).closest('li').remove();};">
+                <img class="settings" style="float:right;padding: 5px;cursor:pointer;margin-right: 10px;" src="<?php echo $this->iconWrench; ?>">
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="input_textbox">Label</label>
+                <div class="controls">
+                    <input type="text" id="input_textbox" placeholder="Placeholder" name="name">
+                </div>
+            </div>
+        </li>
+    </div>
+    <div id="password">
+        <li>
+            <div class="icon_container">
+                <input type="hidden" class="password">
+                <img class="move_handler" style="cursor:move;" src="<?php echo $this->iconArrows; ?>">
+                <span>Element : Password</span>
+                <img class="delete" style="float:right;padding: 5px;cursor:pointer;" src="<?php echo $this->iconCross; ?>" onclick="if(confirm('Dieses Element wirklich l&ouml;schen ?')){$(this).closest('li').remove();};">
+                <img class="settings" style="float:right;padding: 5px;cursor:pointer;margin-right: 10px;" src="<?php echo $this->iconWrench; ?>">
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="input_password">Label</label>
+                <div class="controls">
+                    <input type="password" id="input_password" placeholder="Placeholder" name="name">
+                </div>
+            </div>
+        </li>
+    </div>
+    <div id="hidden">
+        <li>
+            <div class="icon_container">
+                <input type="hidden" class="hidden">
+                <img class="move_handler" style="cursor:move;" src="<?php echo $this->iconArrows; ?>">
+                <span>Element : Hidden</span>
+                <img class="delete" style="float:right;padding: 5px;cursor:pointer;" src="<?php echo $this->iconCross; ?>" onclick="if(confirm('Dieses Element wirklich l&ouml;schen ?')){$(this).closest('li').remove();};">
+                <img class="settings" style="float:right;padding: 5px;cursor:pointer;margin-right: 10px;" src="<?php echo $this->iconWrench; ?>">
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <input type="hidden" id="input_hidden" name="name">
+                </div>
+            </div>
+        </li>
+    </div>
+    
+    <div id="textarea">
+        <li>
+            <div class="icon_container">
+                <input type="hidden" class="textarea">
+                <img class="move_handler" style="cursor:move;" src="<?php echo $this->iconArrows; ?>">
+                <span>Element : Textarea</span>
+                <img class="delete" style="float:right;padding: 5px;cursor:pointer;" src="<?php echo $this->iconCross; ?>" onclick="if(confirm('Dieses Element wirklich l&ouml;schen ?')){$(this).closest('li').remove();};">
+                <img class="settings" style="float:right;padding: 5px;cursor:pointer;margin-right: 10px;" src="<?php echo $this->iconWrench; ?>">
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="input_textarea">Label</label>
+                <div class="controls">
+                    <textarea rows="3" cols="3" name="name" id="input_textarea"></textarea>
+                </div>
+            </div>
+        </li>
+    </div>
+    <div id="checkbox">
+        <li>
+            <div class="icon_container">
+                <input type="hidden" class="checkbox">
+                <img class="move_handler" style="cursor:move;" src="<?php echo $this->iconArrows; ?>">
+                <span>Element : Checkbox</span>
+                <img class="delete" style="float:right;padding: 5px;cursor:pointer;" src="<?php echo $this->iconCross; ?>" onclick="if(confirm('Dieses Element wirklich l&ouml;schen ?')){$(this).closest('li').remove();};">
+                <img class="settings" style="float:right;padding: 5px;cursor:pointer;margin-right: 10px;" src="<?php echo $this->iconWrench; ?>">
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="input_checkbox">Label</label>
+                <div class="controls" style="position: relative; margin-top: 3px;">
+                    <input type="checkbox" value="1" id="input_checkbox" name="name" ><span style="position: absolute;top: 0px; left: 20px;"></span>
+                </div>
+            </div>
+        </li>
+    </div>
+    <div id="radiobutton">
+        <li>
+            <div class="icon_container">
+                <input type="hidden" class="radiobutton">
+                <img class="move_handler" style="cursor:move;" src="<?php echo $this->iconArrows; ?>">
+                <span>Element : Radiobutton</span>
+                <img class="delete" style="float:right;padding: 5px;cursor:pointer;" src="<?php echo $this->iconCross; ?>" onclick="if(confirm('Dieses Element wirklich l&ouml;schen ?')){$(this).closest('li').remove();};">
+                <img class="settings" style="float:right;padding: 5px;cursor:pointer;margin-right: 10px;" src="<?php echo $this->iconWrench; ?>">
+            </div>
+            <div class="control-group">
+                <label class="control-label">Label</label>
+                <input type="hidden" id="input_radiobutton" class="" name="name">
+                <div class="controls" style="margin-top: 5px;">
+                </div>
+            </div>
+        </li>
+    </div>
+    <div id="selectbox">
+        <li>
+            <div class="icon_container">
+                <input type="hidden" class="selectbox">
+                <img class="move_handler" style="cursor:move;" src="<?php echo $this->iconArrows; ?>">
+                <span>Element : Selectbox</span>
+                <img class="delete" style="float:right;padding: 5px;cursor:pointer;" src="<?php echo $this->iconCross; ?>" onclick="if(confirm('Dieses Element wirklich l&ouml;schen ?')){$(this).closest('li').remove();};">
+                <img class="settings" style="float:right;padding: 5px;cursor:pointer;margin-right: 10px;" src="<?php echo $this->iconWrench; ?>">
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="input_selectbox">Label</label>
+                <div class="controls">
+                    <select name="name" id="input_selectbox">
+                    </select>
+                </div>
+            </div>
+        </li>
+    </div>
+    <div id="uploadfield">
+        <li>
+            <div class="icon_container">
+                <input type="hidden" class="uploadfield">
+                <img class="move_handler" style="cursor:move;" src="<?php echo $this->iconArrows; ?>">
+                <span>Element : Uploadfield</span>
+                <img class="delete" style="float:right;padding: 5px;cursor:pointer;" src="<?php echo $this->iconCross; ?>" onclick="if(confirm('Dieses Element wirklich l&ouml;schen ?')){$(this).closest('li').remove();};">
+                <img class="settings" style="float:right;padding: 5px;cursor:pointer;margin-right: 10px;" src="<?php echo $this->iconWrench; ?>">
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="input_uploadfield">Label</label>
+                <div class="controls">
+                    <input type="file" id="input_uploadfield" name="name">
+                </div>
+            </div>
+        </li>
+    </div>
+    <div id="submit">
+        <li>
+            <div class="icon_container">
+                <input type="hidden" class="submit">
+                <img class="move_handler" style="cursor:move;" src="<?php echo $this->iconArrows; ?>">
+                <span>Element : Submit</span>
+                <img class="delete" style="float:right;padding: 5px;cursor:pointer;" src="<?php echo $this->iconCross; ?>" onclick="if(confirm('Dieses Element wirklich l&ouml;schen ?')){$(this).closest('li').remove();};">
+                <img class="settings" style="float:right;padding: 5px;cursor:pointer;margin-right: 10px;" src="<?php echo $this->iconWrench; ?>">
+            </div>
+            <div class="control-group">
+                <input type="hidden" id="input_button" class="">
+                <div class="controls">
+                    <input type="button" class="btn btn-primary" value="Submit">
+                </div>
+            </div>
+        </li>
+    </div>
+    <div id="button">
+        <li>
+            <div class="icon_container">
+                <input type="hidden" class="submit">
+                <img class="move_handler" style="cursor:move;" src="<?php echo $this->iconArrows; ?>">
+                <span>Element : Button</span>
+                <img class="delete" style="float:right;padding: 5px;cursor:pointer;" src="<?php echo $this->iconCross; ?>" onclick="if(confirm('Dieses Element wirklich l&ouml;schen ?')){$(this).closest('li').remove();};">
+                <img class="settings" style="float:right;padding: 5px;cursor:pointer;margin-right: 10px;" src="<?php echo $this->iconWrench; ?>">
+            </div>
+            <div class="control-group">
+                <input type="hidden" id="input_button" class="">
+                <div class="controls">
+                    <input type="button" class="btn" value="Button">
+                </div>
+            </div>
+        </li>
+    </div>
+    <div id="select_option_settings">
+        <li><img class="move_handler" style="cursor:move;" src="<?php echo $this->iconArrows; ?>"><span style="padding-left: 10px;">OptionTitle</span><img class="delete" style="float:right;padding: 5px;cursor:pointer;" src="<?php echo $this->iconCross; ?>" onclick="if(confirm('Dieses Element wirklich l&ouml;schen ?')){$(this).closest('li').remove();};">
+    </div>
+    <div id="radio_option_settings">
+        <li><img class="move_handler" style="cursor:move;" src="<?php echo $this->iconArrows; ?>"><span style="padding-left: 10px;">OptionTitle</span><img class="delete" style="float:right;padding: 5px;cursor:pointer;" src="<?php echo $this->iconCross; ?>" onclick="if(confirm('Dieses Element wirklich l&ouml;schen ?')){$(this).closest('li').remove();};">
+    </div>
+    <div id="select_option">
+        <option value=""></option>
+    </div>
+    <div id="radio_option">
+        <div><input type="radio" value="1" style="margin-top: -3px;"><span style="margin-left: 5px;"></span></div>
+    </div>
+</div>
+<!-- ######################################################################################################## -->
+<!-- ######################################## Konfigurationsdialoge ######################################### -->
+<div id="settings_dialog">
+    <div id="settings_textbox">
+        <form id="form" class="form-horizontal">
+            <div id="field_id">
+                <div class="control-group">
+                    <label class="control-label" for="input_label">Id:</label>
+                    <div class="controls">
+                        <input type="text" id="input_id" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+            <div id="field_class">
+                <div class="control-group">
+                    <label class="control-label" for="input_placeholder">Class:</label>
+                    <div class="controls">
+                        <input type="text" id="input_class" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div id="field_name">
+                <div class="control-group">
+                    <label class="control-label" for="input_label">Name:</label>
+                    <div class="controls">
+                        <input type="text" id="input_name" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+            <div id="field_label">
+                <div class="control-group">
+                    <label class="control-label" for="input_label">Label:</label>
+                    <div class="controls">
+                        <input type="text" id="input_label" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+            <div id="field_placeholder">
+                <div class="control-group">
+                    <label class="control-label" for="input_placeholder">Placeholder:</label>
+                    <div class="controls">
+                        <input type="text" id="input_placeholder" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+            
+        </form>
+    </div>
+    <div id="settings_password">
+        <form id="form" class="form-horizontal">
+            <div id="field_id">
+                <div class="control-group">
+                    <label class="control-label" for="input_label">Id:</label>
+                    <div class="controls">
+                        <input type="text" id="input_id" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+            <div id="field_class">
+                <div class="control-group">
+                    <label class="control-label" for="input_placeholder">Class:</label>
+                    <div class="controls">
+                        <input type="text" id="input_class" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div id="field_name">
+                <div class="control-group">
+                    <label class="control-label" for="input_label">Name:</label>
+                    <div class="controls">
+                        <input type="text" id="input_name" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+            <div id="field_label">
+                <div class="control-group">
+                    <label class="control-label" for="input_label">Label:</label>
+                    <div class="controls">
+                        <input type="text" id="input_label" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+            <div id="field_placeholder">
+                <div class="control-group">
+                    <label class="control-label" for="input_placeholder">Placeholder:</label>
+                    <div class="controls">
+                        <input type="text" id="input_placeholder" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+            
+        </form>
+    </div>
+    <div id="settings_hidden">
+        <form id="form" class="form-horizontal">
+            <div id="field_id">
+                <div class="control-group">
+                    <label class="control-label" for="input_label">Id:</label>
+                    <div class="controls">
+                        <input type="text" id="input_id" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+            <div id="field_class">
+                <div class="control-group">
+                    <label class="control-label" for="input_placeholder">Class:</label>
+                    <div class="controls">
+                        <input type="text" id="input_class" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div id="field_name">
+                <div class="control-group">
+                    <label class="control-label" for="input_label">Name:</label>
+                    <div class="controls">
+                        <input type="text" id="input_name" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div id="settings_textarea">
+        <form id="form" class="form-horizontal">
+            <div id="field_id">
+                <div class="control-group">
+                    <label class="control-label" for="input_label">Id:</label>
+                    <div class="controls">
+                        <input type="text" id="input_id" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+            <div id="field_class">
+                <div class="control-group">
+                    <label class="control-label" for="input_placeholder">Class:</label>
+                    <div class="controls">
+                        <input type="text" id="input_class" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div id="field_name">
+                <div class="control-group">
+                    <label class="control-label" for="input_label">Name:</label>
+                    <div class="controls">
+                        <input type="text" id="input_name" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+            <div id="field_label">
+                <div class="control-group">
+                    <label class="control-label" for="input_label">Label:</label>
+                    <div class="controls">
+                        <input type="text" id="input_label" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+            <div id="field_rows">
+                <div class="control-group">
+                    <label class="control-label" for="input_rows">Rows:</label>
+                    <div class="controls">
+                        <input type="text" id="input_rows" placeholder="" name="name" style="width:50px;">
+                    </div>
+                </div>
+            </div>
+            <div id="field_cols">
+                <div class="control-group">
+                    <label class="control-label" for="input_rows">Cols:</label>
+                    <div class="controls">
+                        <input type="text" id="input_cols" placeholder="" name="name" style="width:50px;">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div id="settings_uploadfield">
+        <form id="form" class="form-horizontal">
+            <div id="field_id">
+                <div class="control-group">
+                    <label class="control-label" for="input_label">Id:</label>
+                    <div class="controls">
+                        <input type="text" id="input_id" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+            <div id="field_class">
+                <div class="control-group">
+                    <label class="control-label" for="input_placeholder">Class:</label>
+                    <div class="controls">
+                        <input type="text" id="input_class" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div id="field_name">
+                <div class="control-group">
+                    <label class="control-label" for="input_label">Name:</label>
+                    <div class="controls">
+                        <input type="text" id="input_name" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+            <div id="field_label">
+                <div class="control-group">
+                    <label class="control-label" for="input_label">Label:</label>
+                    <div class="controls">
+                        <input type="text" id="input_label" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div id="settings_checkbox">
+        <form id="form" class="form-horizontal">
+            <div id="field_id">
+                <div class="control-group">
+                    <label class="control-label" for="input_label">Id:</label>
+                    <div class="controls">
+                        <input type="text" id="input_id" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+            <div id="field_class">
+                <div class="control-group">
+                    <label class="control-label" for="input_placeholder">Class:</label>
+                    <div class="controls">
+                        <input type="text" id="input_class" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div id="field_name">
+                <div class="control-group">
+                    <label class="control-label" for="input_label">Name:</label>
+                    <div class="controls">
+                        <input type="text" id="input_name" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+            <div id="field_label">
+                <div class="control-group">
+                    <label class="control-label" for="input_label">Label:</label>
+                    <div class="controls">
+                        <input type="text" id="input_label" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+            <div id="field_description">
+                <div class="control-group">
+                    <label class="control-label" for="textarea_description">Description:</label>
+                    <div class="controls">
+                        <textarea id="textarea_description" name="name"></textarea>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div id="settings_selectbox">
+        <form id="form" class="form-horizontal">
+            <div id="field_id">
+                <div class="control-group">
+                    <label class="control-label" for="input_label">Id:</label>
+                    <div class="controls">
+                        <input type="text" id="input_id" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+            <div id="field_class">
+                <div class="control-group">
+                    <label class="control-label" for="input_placeholder">Class:</label>
+                    <div class="controls">
+                        <input type="text" id="input_class" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div id="field_name">
+                <div class="control-group">
+                    <label class="control-label" for="input_label">Name:</label>
+                    <div class="controls">
+                        <input type="text" id="input_name" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+            <div id="field_label">
+                <div class="control-group">
+                    <label class="control-label" for="input_label">Label:</label>
+                    <div class="controls">
+                        <input type="text" id="input_label" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div id="container_options">
+                <div class="control-group">
+                    <label class="control-label" for="input_optionname">add option:</label>
+                    <div class="controls">
+                        <input type="text" id="input_optionname" placeholder="" name="name"> <img id="add_select_option" style="padding: 5px; cursor: pointer;" src="<?php echo $this->iconAdd; ?>">
+                    </div>
+                </div>
+                <ul id="optionlist">
+                </ul>
+            </div>
+        </form>
+    </div>
+    <div id="settings_radiobutton">
+        <form id="form" class="form-horizontal">
+            <div id="field_id">
+                <div class="control-group">
+                    <label class="control-label" for="input_label">Id:</label>
+                    <div class="controls">
+                        <input type="text" id="input_id" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+            <div id="field_class">
+                <div class="control-group">
+                    <label class="control-label" for="input_placeholder">Class:</label>
+                    <div class="controls">
+                        <input type="text" id="input_class" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div id="field_name">
+                <div class="control-group">
+                    <label class="control-label" for="input_label">Name:</label>
+                    <div class="controls">
+                        <input type="text" id="input_name" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+            <div id="field_label">
+                <div class="control-group">
+                    <label class="control-label" for="input_label">Label:</label>
+                    <div class="controls">
+                        <input type="text" id="input_label" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div id="container_options">
+                <div class="control-group">
+                    <label class="control-label" for="input_optionname">add option:</label>
+                    <div class="controls">
+                        <input type="text" id="input_optionname" placeholder="" name="name"> <img id="add_radio_option" style="padding: 5px; cursor: pointer;" src="<?php echo $this->iconAdd; ?>">
+                    </div>
+                </div>
+                <ul id="optionlist">
+                </ul>
+            </div>
+        </form>
+    </div>
+    <div id="settings_submit">
+        <form id="form" class="form-horizontal">
+            <div id="field_id">
+                <div class="control-group">
+                    <label class="control-label" for="input_label">Id:</label>
+                    <div class="controls">
+                        <input type="text" id="input_id" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+            <div id="field_class">
+                <div class="control-group">
+                    <label class="control-label" for="input_placeholder">Class:</label>
+                    <div class="controls">
+                        <input type="text" id="input_class" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+            <div id="field_value">
+                <div class="control-group">
+                    <label class="control-label" for="input_placeholder">Value:</label>
+                    <div class="controls">
+                        <input type="text" id="input_value" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div id="settings_button">
+        <form id="form" class="form-horizontal">
+            <div id="field_id">
+                <div class="control-group">
+                    <label class="control-label" for="input_label">Id:</label>
+                    <div class="controls">
+                        <input type="text" id="input_id" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+            <div id="field_class">
+                <div class="control-group">
+                    <label class="control-label" for="input_placeholder">Class:</label>
+                    <div class="controls">
+                        <input type="text" id="input_class" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+            <div id="field_value">
+                <div class="control-group">
+                    <label class="control-label" for="input_placeholder">Value:</label>
+                    <div class="controls">
+                        <input type="text" id="input_value" placeholder="" name="name">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- ######################################################################################################## -->
